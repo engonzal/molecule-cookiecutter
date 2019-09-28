@@ -1,19 +1,30 @@
 ---
 dependency:
-  name: gilt
+  name: galaxy
 driver:
   name: docker
 lint:
   name: yamllint
 platforms:
-  - name: instance-1
-    image: centos:7
+  # Used for switching distros locally
+  # - name: instance
+  #   image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+  #   command: ${MOLECULE_DOCKER_COMMAND:-""}
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   pre_build_image: true
+  - name: instance
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
-scenario:
-  name: {{ cookiecutter.scenario_name }}
 verifier:
   name: testinfra
   lint:

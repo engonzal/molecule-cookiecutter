@@ -1,38 +1,68 @@
-Role Name
-=========
+# {{cookiecutter.role_name}}
 
-A brief description of the role goes here.
+Installs and configures 
 
-Requirements
-------------
+[![Build Status](https://travis-ci.org/engonzal/ansible_role_{{cookiecutter.role_name}}.svg?branch=master)](https://travis-ci.org/engonzal/ansible_role_{{cookiecutter.role_name}})
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Requirements
 
-Role Variables
---------------
+Note that this role requires root.  Ensure become: yes is set at the top level of your playbook or invoke the role in your playbook like:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+- hosts: all
+  roles:
+    - role: engonzal.{{cookiecutter.role_name}}
+      become: yes
+```
 
-Dependencies
-------------
+## Role Variables
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Available variable with examples are below:
 
-Example Playbook
-----------------
+```yaml
+{{cookiecutter.role_name}}_servers:
+  - time.cloudflare.com iburst prefer port 1514
+{{cookiecutter.role_name}}_pools:
+  - ntp.ubuntu.com        iburst maxsources 2
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+You can specify 
 
-    - hosts: servers
-      roles:
-         - { role: {{ cookiecutter.role_name }}, x: 42 }
+```yaml
+{{cookiecutter.role_name}}_measurements_statistics_tracking: false
+{{cookiecutter.role_name}}_disable_external_client: true
+```
 
-License
--------
+You can also enable 
+
+## Example Playbook
+
+### Simple Example (defaults)
+
+```yaml
+- hosts: servers
+  roles:
+      - { role: engonzal.{{cookiecutter.role_name}} }
+```
+
+### Advanced Example (custom server)
+
+```yaml
+- hosts: servers
+  vars:
+    {{cookiecutter.role_name}}_servers:
+      # Custom time server with different port
+      - time.example.com iburst prefer port 1514
+      # Regular time server
+      - time.cloudflare.com iburst prefer
+  roles:
+      - { role: engonzal.{{cookiecutter.role_name}} }
+```
+
+## License
 
 BSD
 
-Author Information
-------------------
+## Author Information
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role was created in 2019 by Noe Gonzalez (<http://engonzal.com> and <https://buildahomelab.com>)
